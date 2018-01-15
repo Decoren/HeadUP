@@ -1,14 +1,14 @@
 package com.fuzple.headup;
 
 import android.app.AlarmManager;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,7 +117,7 @@ public class alset_fragment extends Fragment {
                     thread.start();
 
                     d_listener.listitemlistener(memo, t, m, day, imp, imp, snz, ok_cancel);
-                    FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                    FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.main_container, ((MainActivity) getActivity()).al_f);
                     fragmentTransaction.commit();
                 }
@@ -133,7 +133,7 @@ public class alset_fragment extends Fragment {
             public void onClick(View view) {
                 ok_cancel = 0;
                 d_listener.listitemlistener(memo,t,m,day,imp,imp,snz,ok_cancel);
-                FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.main_container, ((MainActivity) getActivity()).al_f);
                 fragmentTransaction.commit();
             }

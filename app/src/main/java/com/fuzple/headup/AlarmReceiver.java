@@ -39,6 +39,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     vb = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
                     vb.vibrate(1000);
                     MainActivity.adapter.notifyDataSetChanged();
+                    ((DigitalClockActivity)DigitalClockActivity.mContext).FalalaALarm();
                 }
             }
         }

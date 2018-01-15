@@ -1,25 +1,26 @@
 package com.fuzple.headup;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONObject;
 
@@ -28,56 +29,8 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
+public class DigitalClockFragment extends Fragment {
 
-public class DigitalClockActivity extends FragmentActivity {
-
-    public static Context mContext;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-
-        //몰입모드---
-        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
-        int newUiOptions = uiOptions;
-        boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
-        if (isImmersiveModeEnabled) {
-            Log.i("Is on?", "Turning immersive mode mode off. ");
-        } else {
-            Log.i("Is on?", "Turning immersive mode mode on.");
-        }
-        // 몰입 모드를 꼭 적용해야 한다면 아래의 3가지 속성을 모두 적용시켜야 합니다
-        newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
-        newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //----몰입모드
-
-        setContentView(R.layout.activity_digital_clock);
-
-        mContext = this;
-
-        DigitalClockFragment clockF = new DigitalClockFragment();
-        HoloAlarmFragment hAF = new HoloAlarmFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.holo_fragment, clockF).commit();
-
-        status_fragment statusbar = new status_fragment();
-        statusbar.setArguments(getIntent().getExtras());
-        getSupportFragmentManager().beginTransaction().add(R.id.status_fragment, statusbar).commit();
-    }
-
-    public void FalalaALarm(){
-
-    }
-
-    /* 프래그먼트 주서어어억
     FusedLocationProviderClient mFusedLocationClient;
 
     Typeface weatherFont;
@@ -87,7 +40,7 @@ public class DigitalClockActivity extends FragmentActivity {
 
     Handler handler;
 
-    public DigitalClockActivity() {
+    public DigitalClockFragment() {
         handler = new Handler();
     }
 
@@ -96,42 +49,24 @@ public class DigitalClockActivity extends FragmentActivity {
     TextView[] dateDay = new TextView[8];
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
+        return inflater.inflate(R.layout.fragment_digital_clock, container, false);
+    }
 
-        //몰입모드---
-        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
-        int newUiOptions = uiOptions;
-        boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
-        if (isImmersiveModeEnabled) {
-            Log.i("Is on?", "Turning immersive mode mode off. ");
-        } else {
-            Log.i("Is on?", "Turning immersive mode mode on.");
-        }
-        // 몰입 모드를 꼭 적용해야 한다면 아래의 3가지 속성을 모두 적용시켜야 합니다
-        newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
-        newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
+    @Override
+    public void onStart() {
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //----몰입모드
+        super.onStart();
 
-        setContentView(R.layout.activity_digital_clock);
-
-        status_fragment statusbar = new status_fragment();
-        statusbar.setArguments(getIntent().getExtras());
-        getFragmentManager().beginTransaction().add(R.id.status_fragment, statusbar).commit();
-
-        weatherFont = Typeface.createFromAsset(this.getAssets(), "fonts/weather.ttf"); //날씨 아이콘 폰트
-        weatherIcon = (TextView) findViewById(R.id.weather_icon);
+        weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weather.ttf"); //날씨 아이콘 폰트
+        weatherIcon = (TextView) getView().findViewById(R.id.weather_icon);
         weatherIcon.setTypeface(weatherFont);
 
         //일단 기본 이미지로 배경 초기화
-        ImageView iv = (ImageView) findViewById(R.id.background_image);
-        GlideApp.with(this).asGif().load(R.drawable.aoi).placeholder(R.drawable.loading).fitCenter().into(iv);
+        ImageView iv = (ImageView) getView().findViewById(R.id.background_image);
+        GlideApp.with(this).asGif().load(R.drawable.aoi).placeholder(R.drawable.mirei).fitCenter().into(iv);
 
         //요일 초기화
         new Thread() {
@@ -146,8 +81,8 @@ public class DigitalClockActivity extends FragmentActivity {
         }.start();
 
         //권한 확인
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -159,12 +94,12 @@ public class DigitalClockActivity extends FragmentActivity {
         }
         // 위치 정보 + 날씨 업데이트
         mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
                         if (location != null) {
-                            wi = (TextView) findViewById(R.id.textWi);
-                            gi = (TextView) findViewById(R.id.textGyo);
+                            wi = (TextView) getView().findViewById(R.id.textWi);
+                            gi = (TextView) getView().findViewById(R.id.textGyo);
                             wi.setText("위도 : " + location.getLatitude());
                             gi.setText("경도 : " + location.getLongitude());
                             updateWeatherData(location.getLatitude(), location.getLongitude());
@@ -218,7 +153,7 @@ public class DigitalClockActivity extends FragmentActivity {
             JSONObject details = json.getJSONArray("weather").getJSONObject(0);
             JSONObject main = json.getJSONObject("main");
 
-            currentTemperatureField = (TextView) findViewById(R.id.current_temperature_field);
+            currentTemperatureField = (TextView) getView().findViewById(R.id.current_temperature_field);
             currentTemperatureField.setText(
                     String.format("%.2f", main.getDouble("temp")) + " ℃");
 
@@ -232,8 +167,8 @@ public class DigitalClockActivity extends FragmentActivity {
     }
 
     private void setWeatherIcon(int actualId, long sunrise, long sunset) {
-        weatherIcon = (TextView) findViewById(R.id.weather_icon);
-        ImageView iv = (ImageView) findViewById(R.id.background_image);
+        weatherIcon = (TextView) getView().findViewById(R.id.weather_icon);
+        ImageView iv = (ImageView) getView().findViewById(R.id.background_image);
 
         int id = actualId / 100;
         String icon = "";
@@ -241,36 +176,36 @@ public class DigitalClockActivity extends FragmentActivity {
             long currentTime = new Date().getTime();
             if (currentTime >= sunrise && currentTime < sunset) {    //낮이면
                 icon = this.getString(R.string.weather_sunny);
-                GlideApp.with(this).asGif().load(R.drawable.rola).placeholder(R.drawable.loading).centerCrop().into(iv);
+                GlideApp.with(this).asGif().load(R.drawable.weather_sun).placeholder(R.drawable.mirei).centerCrop().into(iv);
             } else {
                 icon = this.getString(R.string.weather_clear_night);    //밤이면
-                GlideApp.with(this).asGif().load(R.drawable.rola5).placeholder(R.drawable.loading).centerCrop().into(iv);
+                GlideApp.with(this).asGif().load(R.drawable.rola3).placeholder(R.drawable.mirei).centerCrop().into(iv);
             }
         } else {
             switch (id) {
                 case 2:
                     icon = this.getString(R.string.weather_thunder);   //뇌우 Thunderstorm
-                    GlideApp.with(this).asGif().load(R.drawable.elza).placeholder(R.drawable.loading).centerCrop().into(iv);
+                    GlideApp.with(this).asGif().load(R.drawable.elza).placeholder(R.drawable.mirei).centerCrop().into(iv);
                     break;
                 case 3:
                     icon = this.getString(R.string.weather_drizzle);   //이슬비 Drizzle
-                    GlideApp.with(this).asGif().load(R.drawable.rei).placeholder(R.drawable.loading).centerCrop().into(iv);
+                    GlideApp.with(this).asGif().load(R.drawable.rei).placeholder(R.drawable.mirei).centerCrop().into(iv);
                     break;
                 case 7:
                     icon = this.getString(R.string.weather_foggy);     //안개 Atmosphere
-                    GlideApp.with(this).asGif().load(R.drawable.sumire2).placeholder(R.drawable.loading).centerCrop().into(iv);
+                    GlideApp.with(this).asGif().load(R.drawable.sumire2).placeholder(R.drawable.mirei).centerCrop().into(iv);
                     break;
                 case 8:
                     icon = this.getString(R.string.weather_cloudy);    //구름 낌 Clouds
-                    GlideApp.with(this).asGif().load(R.drawable.stars).placeholder(R.drawable.loading).centerCrop().into(iv);
+                    GlideApp.with(this).asGif().load(R.drawable.weather_cloudy).placeholder(R.drawable.mirei).centerCrop().into(iv);
                     break;
                 case 6:
                     icon = this.getString(R.string.weather_snowy);     //눈 Snow
-                    GlideApp.with(this).asGif().load(R.drawable.yume).placeholder(R.drawable.loading).centerCrop().into(iv);
+                    GlideApp.with(this).asGif().load(R.drawable.weather_snow).placeholder(R.drawable.mirei).centerCrop().into(iv);
                     break;
                 case 5:
                     icon = this.getString(R.string.weather_rainy);     //비 Rain
-                    GlideApp.with(this).asGif().load(R.drawable.yumerola).placeholder(R.drawable.loading).centerCrop().into(iv);
+                    GlideApp.with(this).asGif().load(R.drawable.weather_rain).placeholder(R.drawable.mirei).centerCrop().into(iv);
                     break;
             }
         }
@@ -289,8 +224,7 @@ public class DigitalClockActivity extends FragmentActivity {
         for (int i = 1; i <= 7; i++) {
             int resID = getResources().getIdentifier("textDay" + i,
                     "id", "com.fuzple.headup");
-            (dateDay[i] = (TextView)findViewById(resID)).setTextColor(Color.parseColor("#ffffff"));
+            (dateDay[i] = (TextView)getView().findViewById(resID)).setTextColor(Color.parseColor("#ffffff"));
         }
     }
-    래그먼트으으으*/
 }

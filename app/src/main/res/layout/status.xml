@@ -10,9 +10,10 @@
         android:id="@+id/status_linear"
         android:gravity="right"
        >
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="배터리"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="배터리" />
+
     ></LinearLayout>
 </LinearLayout>
