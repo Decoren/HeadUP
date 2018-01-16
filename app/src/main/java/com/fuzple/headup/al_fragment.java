@@ -1,6 +1,8 @@
 package com.fuzple.headup;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,10 +13,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -38,6 +42,7 @@ public class al_fragment extends Fragment {
     Timer timer;
     Handler mHandler  = new Handler();
     ImageView a_i;
+    int po;
 
     Runnable mUpdateTimeTask = new Runnable() {
         public void run() {
@@ -70,6 +75,31 @@ public class al_fragment extends Fragment {
 
         listview.setAdapter(((MainActivity)getActivity()).adapter);
 
+        listview.setFocusable(true);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialog.Builder ab = new AlertDialog.Builder(getContext());
+                po = position;
+                ab.setTitle("알람 설정").setMessage("알람을 삭제하시겠습니까?")
+                        .setCancelable(false)
+                        .setPositiveButton("삭제",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id)
+                                    {
+                                         MainActivity.adapter.deleteItem(po);
+                                         MainActivity.adapter.notifyDataSetChanged();
+                                    }
+                                })
+                        .setNegativeButton("취소",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id)
+                                    {
+
+                                    }
+                                }).show();
+            }
+        });
         alset_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,7 +198,7 @@ public class al_fragment extends Fragment {
                     imp = Color.WHITE;
                 }
 
-                ((MainActivity) getActivity()).adapter.addItem(bundle.getString("memo"), time, bundle.getString("day"), ap, imp,bundle.getInt("imm"));
+                ((MainActivity) getActivity()).adapter.addItem(bundle.getString("memo"), time, bundle.getString("day"), ap, imp,bundle.getInt("imm"), false);
 
                 Myadapter md = new Myadapter();
                 Listviewitem lt = (Listviewitem) MainActivity.adapter.getItem(MainActivity.adapter.getCount()-1);
@@ -176,10 +206,11 @@ public class al_fragment extends Fragment {
                 for (int i = 0; i < MainActivity.adapter.getCount()-1; i++)
                 {
                     Listviewitem l_t = (Listviewitem) MainActivity.adapter.getItem(i);
+                    l_t.setSwitch(((Listviewitem) MainActivity.adapter.getItem(i)).getSwitch());
 
                     if(lt.getim() > l_t.getim())
                     {
-                        md.addItem(lt.getMemo(),lt.getTime(),lt.getDay(),lt.getAp(),lt.getimimage(),lt.getim());
+                        md.addItem(lt.getMemo(),lt.getTime(),lt.getDay(),lt.getAp(),lt.getimimage(),lt.getim(), lt.getSwitch());
                         lt = l_t;
                     }
                     else if(lt.getim() == l_t.getim())
@@ -200,33 +231,34 @@ public class al_fragment extends Fragment {
 
                         if(t1 > t2)
                         {
-                            md.addItem(l_t.getMemo(),l_t.getTime(),l_t.getDay(),l_t.getAp(),l_t.getimimage(),l_t.getim());
+                            md.addItem(l_t.getMemo(),l_t.getTime(),l_t.getDay(),l_t.getAp(),l_t.getimimage(),l_t.getim(), l_t.getSwitch());
+
                         }
                         else if(t1 == t2)
                         {
                             if(Integer.parseInt(tm1[1]) > Integer.parseInt(tm2[1]))
                             {
-                                md.addItem(l_t.getMemo(),l_t.getTime(),l_t.getDay(),l_t.getAp(),l_t.getimimage(),l_t.getim());
+                                md.addItem(l_t.getMemo(),l_t.getTime(),l_t.getDay(),l_t.getAp(),l_t.getimimage(),l_t.getim(), l_t.getSwitch());
                             }
                             else
                             {
-                                md.addItem(lt.getMemo(),lt.getTime(),lt.getDay(),lt.getAp(),lt.getimimage(),lt.getim());
+                                md.addItem(lt.getMemo(),lt.getTime(),lt.getDay(),lt.getAp(),lt.getimimage(),lt.getim(), lt.getSwitch());
                                 lt = l_t;
                             }
                         }
                         else
                         {
-                            md.addItem(lt.getMemo(),lt.getTime(),lt.getDay(),lt.getAp(),lt.getimimage(),lt.getim());
+                            md.addItem(lt.getMemo(),lt.getTime(),lt.getDay(),lt.getAp(),lt.getimimage(),lt.getim(), lt.getSwitch());
                             lt = l_t;
                         }
                     }
                     else
                     {
-                        md.addItem(l_t.getMemo(),l_t.getTime(),l_t.getDay(),l_t.getAp(),l_t.getimimage(),l_t.getim());
+                        md.addItem(l_t.getMemo(),l_t.getTime(),l_t.getDay(),l_t.getAp(),l_t.getimimage(),l_t.getim(), l_t.getSwitch());
                     }
                 }
 
-                md.addItem(lt.getMemo(),lt.getTime(),lt.getDay(),lt.getAp(),lt.getimimage(),lt.getim());
+                md.addItem(lt.getMemo(),lt.getTime(),lt.getDay(),lt.getAp(),lt.getimimage(),lt.getim(), lt.getSwitch());
 
                 ((MainActivity) getActivity()).adapter = md;
                 ((MainActivity) getActivity()).adapter.notifyDataSetChanged();

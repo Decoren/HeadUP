@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -26,7 +29,7 @@ import java.util.Calendar;
 
 public class alset_fragment extends Fragment {
 
-    TimePicker timePicker;
+    mytimepicker timePicker;
     ToggleButton mon,tues,wednes,thurs,fri,satur,sun;
     ToggleButton top,mid,bot;
     EditText editText;
@@ -44,6 +47,7 @@ public class alset_fragment extends Fragment {
     PendingIntent pender;
     Thread thread;
     int d_check;
+    TextView a_text,i_text;
 
     public interface datalistener
     {
@@ -65,8 +69,10 @@ public class alset_fragment extends Fragment {
         calendar = Calendar.getInstance();
         t = calendar.get(calendar.HOUR_OF_DAY);
         m = calendar.get(calendar.MINUTE);
-        timePicker = (TimePicker)v.findViewById(R.id.timerpicker);
+        timePicker = (mytimepicker)v.findViewById(R.id.timerpicker);
 
+        a_text =(TextView)v.findViewById(R.id.a_text);
+        i_text = (TextView)v.findViewById(R.id.i_text);
         editText = (EditText)v.findViewById(R.id.memo);
         sun = (ToggleButton)v.findViewById(R.id.sun);
         mon = (ToggleButton)v.findViewById(R.id.mon);
@@ -80,6 +86,9 @@ public class alset_fragment extends Fragment {
         bot = (ToggleButton)v.findViewById(R.id.bot);
         btn1 = (Button)v.findViewById(R.id.ok);
         btn2 = (Button)v.findViewById(R.id.cancel);
+
+        int color = Color.parseColor("#A3C2FA");
+        editText.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
 
         timePicker.setIs24HourView(false);
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
@@ -144,13 +153,13 @@ public class alset_fragment extends Fragment {
             public void onClick(View view) {
                 if(sun.isChecked())
                 {
-                    sun.setTextColor(Color.RED);
+                    sun.setSelected(true);
                     d[0] ="su";
                     d_check++;
                 }
                 else
                 {
-                    sun.setTextColor(Color.BLACK);
+                    sun.setSelected(false);
                     d[0] ="";
                     d_check--;
                 }
@@ -161,13 +170,13 @@ public class alset_fragment extends Fragment {
             public void onClick(View view) {
                 if(mon.isChecked())
                 {
-                    mon.setTextColor(Color.RED);
+                    mon.setSelected(true);
                     d[1] ="mo";
                     d_check++;
                 }
                 else
                 {
-                    mon.setTextColor(Color.BLACK);
+                    mon.setSelected(false);
                     d[1] = "";
                     d_check--;
                 }
@@ -178,13 +187,13 @@ public class alset_fragment extends Fragment {
             public void onClick(View view) {
                 if(tues.isChecked())
                 {
-                    tues.setTextColor(Color.RED);
+                    tues.setSelected(true);
                     d[2] ="tu";
                     d_check++;
                 }
                 else
                 {
-                    tues.setTextColor(Color.BLACK);
+                    tues.setSelected(false);
                     d[2] = "";
                     d_check--;
                 }
@@ -195,13 +204,13 @@ public class alset_fragment extends Fragment {
             public void onClick(View view) {
                 if(wednes.isChecked())
                 {
-                    wednes.setTextColor(Color.RED);
+                    wednes.setSelected(true);
                     d[3] ="we";
                     d_check++;
                 }
                 else
                 {
-                    wednes.setTextColor(Color.BLACK);
+                    wednes.setSelected(false);
                     d[3] = "";
                     d_check--;
                 }
@@ -212,13 +221,13 @@ public class alset_fragment extends Fragment {
             public void onClick(View view) {
                 if(thurs.isChecked())
                 {
-                    thurs.setTextColor(Color.RED);
+                    thurs.setSelected(true);
                     d[4] ="th";
                     d_check++;
                 }
                 else
                 {
-                    thurs.setTextColor(Color.BLACK);
+                    thurs.setSelected(false);
                     d[4] ="";
                     d_check--;
                 }
@@ -229,13 +238,13 @@ public class alset_fragment extends Fragment {
             public void onClick(View view) {
                 if(fri.isChecked())
                 {
-                    fri.setTextColor(Color.RED);
+                    fri.setSelected(true);
                     d[5] ="fr";
                     d_check++;
                 }
                 else
                 {
-                    fri.setTextColor(Color.BLACK);
+                    fri.setSelected(false);
                     d[5] ="";
                     d_check--;
                 }
@@ -246,13 +255,13 @@ public class alset_fragment extends Fragment {
             public void onClick(View view) {
                 if(satur.isChecked())
                 {
-                    satur.setTextColor(Color.RED);
+                    satur.setSelected(true);
                     d[6] ="sa";
                     d_check++;
                 }
                 else
                 {
-                    satur.setTextColor(Color.BLACK);
+                    satur.setSelected(false);
                     d[6] ="";
                     d_check--;
                 }
@@ -264,14 +273,14 @@ public class alset_fragment extends Fragment {
             public void onClick(View view) {
                 if(top.isChecked())
                 {
-                    top.setBackgroundColor(Color.RED);
-                    mid.setBackgroundColor(Color.WHITE);
-                    bot.setBackgroundColor(Color.WHITE);
+                    top.setSelected(true);
+                    mid.setSelected(false);
+                    bot.setSelected(false);
                     imp = 3;
                 }
                 else
                 {
-                    top.setBackgroundColor(Color.WHITE);
+                    top.setSelected(false);
                     imp = 0;
                 }
             }
@@ -281,14 +290,14 @@ public class alset_fragment extends Fragment {
             public void onClick(View view) {
                 if(mid.isChecked())
                 {
-                    top.setBackgroundColor(Color.WHITE);
-                    mid.setBackgroundColor(Color.YELLOW);
-                    bot.setBackgroundColor(Color.WHITE);
+                    top.setSelected(false);
+                    mid.setSelected(true);
+                    bot.setSelected(false);
                     imp = 2;
                 }
                 else
                 {
-                    mid.setBackgroundColor(Color.WHITE);
+                    mid.setSelected(false);
                     imp = 0;
                 }
             }
@@ -298,14 +307,14 @@ public class alset_fragment extends Fragment {
             public void onClick(View view) {
                 if(bot.isChecked())
                 {
-                    top.setBackgroundColor(Color.WHITE);
-                    mid.setBackgroundColor(Color.WHITE);
-                    bot.setBackgroundColor(Color.GREEN);
+                    top.setSelected(false);
+                    mid.setSelected(false);
+                    bot.setSelected(true);
                     imp = 1;
                 }
                 else
                 {
-                    bot.setBackgroundColor(Color.WHITE);
+                    bot.setSelected(false);
                     imp = 0;
                 }
             }

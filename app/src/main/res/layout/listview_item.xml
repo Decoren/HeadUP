@@ -5,6 +5,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/lv_linear"
         android:orientation="horizontal">
         <TextView
             android:layout_width="match_parent"
@@ -53,6 +54,7 @@
                 <Switch
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:focusable="false"
                     android:id="@+id/list_switch"/>
             </LinearLayout>
         </LinearLayout>

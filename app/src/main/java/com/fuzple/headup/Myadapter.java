@@ -35,37 +35,51 @@ public class Myadapter extends BaseAdapter {
         return listViewItemList.size();
     }
 
-    Switch sw;
     Listviewitem item;
+    int pos;
     public View getView(int position, View convertView, ViewGroup parent) {
-        final int pos = position;
+        pos = position;
         final Context context = parent.getContext();
+        View v = convertView;
+        ViewHolder viewholder  = new ViewHolder();
 
         // "listview_item" Layout을 inflate하여 convertView 참조 획득.
-        if (convertView == null) {
+        if (v == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.listview_item, parent, false);
-            convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300));
+            v = inflater.inflate(R.layout.listview_item, parent, false);
+            v.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300));
+            viewholder.iv2 = (ImageView) v.findViewById(R.id.im_image);
+            viewholder.tv1 = (TextView) v.findViewById(R.id.memo);
+            viewholder.tv2 = (TextView) v.findViewById(R.id.time);
+            viewholder.tv3 = (TextView) v.findViewById(R.id.day);
+            viewholder.ap = (TextView) v.findViewById(R.id.ap);
+            viewholder.sw = (Switch)v.findViewById(R.id.list_switch);
+            v.setTag(viewholder);
+        }
+        else
+        {
+            viewholder = (ViewHolder)convertView.getTag();
         }
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
 
-        ImageView iv2 = (ImageView) convertView.findViewById(R.id.im_image);
-        TextView tv1 = (TextView) convertView.findViewById(R.id.memo);
-        TextView tv2 = (TextView) convertView.findViewById(R.id.time);
-        TextView tv3 = (TextView) convertView.findViewById(R.id.day);
-        TextView ap = (TextView) convertView.findViewById(R.id.ap);
-        sw = (Switch)convertView.findViewById(R.id.list_switch);
-        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        item = (Listviewitem)getItem(position);
+        viewholder.sw.setTag(item);
+
+        viewholder.sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onCheckedChanged(CompoundButton v, boolean isChecked) {
+                Listviewitem lv = (Listviewitem)v.getTag();
+
                 if(isChecked==true)
                 {
-                    item.setSwitch(true);
+                    lv.setSwitch(true);
+                    notifyDataSetChanged();
                 }
                 else
                 {
-                    item.setSwitch(false);
+                    lv.setSwitch(false);
+                    notifyDataSetChanged();
                 }
             }
         });
@@ -73,14 +87,14 @@ public class Myadapter extends BaseAdapter {
         Listviewitem listViewItem = listViewItemList.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
-        tv1.setText(listViewItem.getMemo());
-        tv2.setText(listViewItem.getTime());
-        tv3.setText(listViewItem.getDay());
-        ap.setText(listViewItem.getAp());
-        iv2.setBackgroundColor(listViewItem.getimimage());
-        sw.setChecked(listViewItem.getSwitch());
+        viewholder.tv1.setText(listViewItem.getMemo());
+        viewholder.tv2.setText(listViewItem.getTime());
+        viewholder.tv3.setText(listViewItem.getDay());
+        viewholder.ap.setText(listViewItem.getAp());
+        viewholder.iv2.setBackgroundColor(listViewItem.getimimage());
+        viewholder.sw.setChecked(listViewItem.getSwitch());
 
-        return convertView;
+        return v;
     }
 
     // 지정한 위치(position)에 있는 데이터와 관계된 아이템(row)의 ID를 리턴. : 필수 구현
@@ -96,7 +110,7 @@ public class Myadapter extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String memo, String time, String day, String ap, int im, int imm) {
+    public void addItem(String memo, String time, String day, String ap, int im, int imm, boolean sc) {
         item = new Listviewitem();
 
         item.setTime(time);
@@ -105,6 +119,7 @@ public class Myadapter extends BaseAdapter {
         item.setap(ap);
         item.setimimage(im);
         item.setim(imm);
+        item.setSwitch(sc);
 
         listViewItemList.add(item);
     }
@@ -115,7 +130,18 @@ public class Myadapter extends BaseAdapter {
     }
 
     @Override
-    public void notifyDataSetChanged() {
+    public void notifyDataSetChanged()
+    {
         super.notifyDataSetChanged();
     }
+
+    static class ViewHolder {
+        ImageView iv2;
+        TextView tv1;
+        TextView tv2;
+        TextView tv3;
+        TextView ap;
+        Switch sw;
+    }
+
 }

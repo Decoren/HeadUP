@@ -3,51 +3,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F1F8FF"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_weight="1">
-        <LinearLayout
+        android:layout_weight="2">
+           <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_weight="4">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <Button
+               <Button
                     android:id="@+id/cancel"
                     android:layout_margin="5dp"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/cancel"
-                    android:text="취 소" />
-                <ImageView
-                    android:layout_width="120dp"
+                    android:background="@drawable/cancel" />
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:background="@drawable/alarm" />
+                    android:layout_marginLeft="10dp"
+                    style="@style/textstyle"
+                    android:id="@+id/a_text"
+                    android:text="Alarm"/>
+
                 <EditText
                     android:id="@+id/memo"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="40dp"
-                    android:background="@drawable/edit_under"
+                    android:layout_margin="10dp"
                     android:hint="알 람 내 용"
                     android:singleLine="true" />
             </LinearLayout>
-        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_weight="4">
-            <TimePicker
+            android:layout_weight="3">
+            <com.fuzple.headup.mytimepicker
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/timerpicker"
@@ -64,7 +60,9 @@
                     android:id="@+id/sun"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="1"
+                    android:background="@drawable/dayofweek"
                     android:textOff="일"
                     android:textOn="일"/>
 
@@ -72,7 +70,9 @@
                     android:id="@+id/mon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="1"
+                    android:background="@drawable/dayofweek"
                     android:textOff="월"
                     android:textOn="월"/>
 
@@ -80,7 +80,9 @@
                     android:id="@+id/tues"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="1"
+                    android:background="@drawable/dayofweek"
                     android:textOff="화"
                     android:textOn="화"/>
 
@@ -88,7 +90,9 @@
                     android:id="@+id/wednes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="1"
+                    android:background="@drawable/dayofweek"
                     android:textOff="수"
                     android:textOn="수"/>
 
@@ -96,7 +100,9 @@
                     android:id="@+id/thurs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="1"
+                    android:background="@drawable/dayofweek"
                     android:textOff="목"
                     android:textOn="목"/>
 
@@ -104,7 +110,9 @@
                     android:id="@+id/fri"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="1"
+                    android:background="@drawable/dayofweek"
                     android:textOff="금"
                     android:textOn="금"/>
 
@@ -112,7 +120,9 @@
                     android:id="@+id/satur"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="1"
+                    android:background="@drawable/dayofweek"
                     android:textOff="토"
                     android:textOn="토"/>
              </LinearLayout>
@@ -121,7 +131,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_weight="3">
+            android:layout_weight="4">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -132,63 +142,49 @@
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
                     android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="120dp"
+                    <TextView
+                        android:layout_width="match_parent"
                         android:layout_height="30dp"
-                        android:background="@drawable/imp_t" />
+                        android:id="@+id/i_text"
+                        style="@style/textstyle"
+                        android:text="Important"/>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
                         android:layout_weight="1">
+
                         <ToggleButton
                             android:id="@+id/top"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:background="@android:color/white"
-                            android:textOff="상"
-                            android:textOn="상" />
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@drawable/h_btn"
+                            android:textOff="H"
+                            android:textOn="H" />
 
                         <ToggleButton
                             android:id="@+id/mid"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
                             android:layout_weight="1"
-                            android:background="@android:color/white"
-                            android:textOff="중"
-                            android:textOn="중" />
+                            android:background="@drawable/m_btn"
+                            android:textOff="M"
+                            android:textOn="M" />
                         <ToggleButton
                             android:id="@+id/bot"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
                             android:layout_weight="1"
-                            android:background="@android:color/white"
-                            android:textOff="하"
-                            android:textOn="하" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="100dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/snooze" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"/>
-                            <Switch
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"/>
-                        </LinearLayout>
+                            android:background="@drawable/l_btn"
+                            android:textOff="L"
+                            android:textOn="L" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -206,7 +202,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:background="@drawable/plus"
-                    android:text="확 인" />
+                    />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

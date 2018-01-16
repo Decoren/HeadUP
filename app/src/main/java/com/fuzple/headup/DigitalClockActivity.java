@@ -1,36 +1,11 @@
 package com.fuzple.headup;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.location.Location;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import org.json.JSONObject;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 public class DigitalClockActivity extends FragmentActivity {
 
@@ -78,6 +53,11 @@ public class DigitalClockActivity extends FragmentActivity {
     }
 
     /* 프래그먼트 주서어어억
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+public class DigitalClockActivity extends AppCompatActivity {
     FusedLocationProviderClient mFusedLocationClient;
 
     Typeface weatherFont;
@@ -131,7 +111,7 @@ public class DigitalClockActivity extends FragmentActivity {
 
         //일단 기본 이미지로 배경 초기화
         ImageView iv = (ImageView) findViewById(R.id.background_image);
-        GlideApp.with(this).asGif().load(R.drawable.aoi).placeholder(R.drawable.loading).fitCenter().into(iv);
+        GlideApp.with(this).asGif().load(R.drawable.aoi).placeholder(R.drawable.mirei).fitCenter().into(iv);
 
         //요일 초기화
         new Thread() {
@@ -159,15 +139,16 @@ public class DigitalClockActivity extends FragmentActivity {
         }
         // 위치 정보 + 날씨 업데이트
         mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                .addOnCompleteListener(this, new OnCompleteListener<Location>() {
                     @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task != null) {
+
                             wi = (TextView) findViewById(R.id.textWi);
                             gi = (TextView) findViewById(R.id.textGyo);
-                            wi.setText("위도 : " + location.getLatitude());
-                            gi.setText("경도 : " + location.getLongitude());
-                            updateWeatherData(location.getLatitude(), location.getLongitude());
+                            wi.setText("위도 : " + task.getResult().getLatitude());
+                            gi.setText("경도 : " + task.getResult().getLongitude());
+                            updateWeatherData(task.getResult().getLatitude(), task.getResult().getLongitude());
                         }
                     }
                 });
@@ -241,36 +222,36 @@ public class DigitalClockActivity extends FragmentActivity {
             long currentTime = new Date().getTime();
             if (currentTime >= sunrise && currentTime < sunset) {    //낮이면
                 icon = this.getString(R.string.weather_sunny);
-                GlideApp.with(this).asGif().load(R.drawable.rola).placeholder(R.drawable.loading).centerCrop().into(iv);
+                GlideApp.with(this).asGif().load(R.drawable.rola).placeholder(R.drawable.mirei).centerCrop().into(iv);
             } else {
                 icon = this.getString(R.string.weather_clear_night);    //밤이면
-                GlideApp.with(this).asGif().load(R.drawable.rola5).placeholder(R.drawable.loading).centerCrop().into(iv);
+                GlideApp.with(this).asGif().load(R.drawable.rola5).placeholder(R.drawable.mirei).centerCrop().into(iv);
             }
         } else {
             switch (id) {
                 case 2:
                     icon = this.getString(R.string.weather_thunder);   //뇌우 Thunderstorm
-                    GlideApp.with(this).asGif().load(R.drawable.elza).placeholder(R.drawable.loading).centerCrop().into(iv);
+                    GlideApp.with(this).asGif().load(R.drawable.elza).placeholder(R.drawable.mirei).centerCrop().into(iv);
                     break;
                 case 3:
                     icon = this.getString(R.string.weather_drizzle);   //이슬비 Drizzle
-                    GlideApp.with(this).asGif().load(R.drawable.rei).placeholder(R.drawable.loading).centerCrop().into(iv);
+                    GlideApp.with(this).asGif().load(R.drawable.rei).placeholder(R.drawable.mirei).centerCrop().into(iv);
                     break;
                 case 7:
                     icon = this.getString(R.string.weather_foggy);     //안개 Atmosphere
-                    GlideApp.with(this).asGif().load(R.drawable.sumire2).placeholder(R.drawable.loading).centerCrop().into(iv);
+                    GlideApp.with(this).asGif().load(R.drawable.sumire2).placeholder(R.drawable.mirei).centerCrop().into(iv);
                     break;
                 case 8:
                     icon = this.getString(R.string.weather_cloudy);    //구름 낌 Clouds
-                    GlideApp.with(this).asGif().load(R.drawable.stars).placeholder(R.drawable.loading).centerCrop().into(iv);
+                    GlideApp.with(this).asGif().load(R.drawable.stars).placeholder(R.drawable.mirei).centerCrop().into(iv);
                     break;
                 case 6:
                     icon = this.getString(R.string.weather_snowy);     //눈 Snow
-                    GlideApp.with(this).asGif().load(R.drawable.yume).placeholder(R.drawable.loading).centerCrop().into(iv);
+                    GlideApp.with(this).asGif().load(R.drawable.yume).placeholder(R.drawable.mirei).centerCrop().into(iv);
                     break;
                 case 5:
                     icon = this.getString(R.string.weather_rainy);     //비 Rain
-                    GlideApp.with(this).asGif().load(R.drawable.yumerola).placeholder(R.drawable.loading).centerCrop().into(iv);
+                    GlideApp.with(this).asGif().load(R.drawable.yumerola).placeholder(R.drawable.mirei).centerCrop().into(iv);
                     break;
             }
         }
